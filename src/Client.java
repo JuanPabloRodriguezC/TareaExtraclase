@@ -4,34 +4,34 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class Client {
-    //metodo principal
-    public static void main(String[] args) throws IOException{
-        String host = "127.0.0.1";
-        int puerto = 5030;
+public class Client implements Runnable{
+
+    private int puerto;
+    private String mensaje;
+
+    public Client(int puerto, String mensaje){
+        this.puerto = puerto;
+        this.mensaje = mensaje;
+    }
+
+    @Override
+    public void run() {
+        final String host = "127.0.0.1";
         DataInputStream in;
         DataOutputStream out;
 
 
         try {
             Socket socketCliente = new Socket(host, puerto);
-            in = new DataInputStream(socketCliente.getInputStream());
             out = new DataOutputStream(socketCliente.getOutputStream());
 
-            out.writeUTF("Cliente concectado con servidor");
-
-            String mensaje = in.readUTF();
-
-            System.out.println(mensaje);
+            out.writeUTF(mensaje);
 
             socketCliente.close();
 
 
         }catch (IOException ex){
-
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-
-
     }
 }
